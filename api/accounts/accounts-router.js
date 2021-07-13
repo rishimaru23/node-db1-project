@@ -13,7 +13,7 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.get('/:id', md.checkAccountId, async (req, res, next) => {
+router.get('/:id', md.checkAccountId, async (req, res, next) => { //eslint-disable-line
  res.json(req.account)
 })
 
@@ -35,10 +35,10 @@ router.put(
   '/:id',
   md.checkAccountId,
   md.checkAccountPayload,
-  md.checkAccountNameUnique,
-  (req, res, next) => {
-  // DO YOUR MAGIC
-  try {
+  async (req, res, next) => {
+    const updated = await Account.updateById(req.params.id, req.body)
+    res.json(updated)
+    try {
     res.json('update account')
   } catch (err) {
     next(err)
